@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { buildMetadata } from "@/utils/seoConfig";
 import { clientsData } from "@/lib/data";
 
@@ -12,9 +13,28 @@ export default function ClientsPage() {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">{clientsData.description}</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {clientsData.clients.map((client, i) => (
-            <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center justify-center text-center hover:shadow-md transition-shadow">
-              <span className="text-gray-700 font-semibold text-sm">{client}</span>
+          {clientsData.clients.map((client, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col items-center gap-3"
+            >
+              {client.logo ? (
+                <div className="relative w-32 h-16">
+                  <Image
+                    src={client.logo}
+                    alt={client.name}
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              ) : (
+                <div className="w-32 h-16 bg-blue-50 rounded flex items-center justify-center">
+                  <span className="text-[#0077B6] font-semibold text-sm text-center px-2">
+                    {client.name}
+                  </span>
+                </div>
+              )}
+              <p className="text-gray-700 font-medium text-sm text-center">{client.name}</p>
             </div>
           ))}
         </div>

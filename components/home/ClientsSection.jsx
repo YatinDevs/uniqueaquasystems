@@ -31,7 +31,7 @@ export default function ClientsSection() {
               key={i}
               className="inline-flex items-center bg-white rounded-xl px-6 py-3 shadow-sm border border-gray-100 min-w-max"
             >
-              <span className="text-gray-700 font-semibold text-sm">{client}</span>
+              <span className="text-gray-700 font-semibold text-sm">{client.name}</span>
             </div>
           ))}
         </motion.div>

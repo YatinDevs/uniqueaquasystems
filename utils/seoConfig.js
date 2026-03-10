@@ -467,7 +467,83 @@ export function buildDivisionMetadata(divisionSlug) {
   };
 }
 
+// ─── buildProductPageMetadata — for individual product/category detail pages ──
+// Usage: export const metadata = buildProductPageMetadata("cooling-towers-open-loop")
+export function buildProductPageMetadata(slug) {
+  // In UniqueAqua, slug IS the category slug — use productCategorySEO
+  const seo = productCategorySEO[slug] || pageSEO.products;
+  return {
+    title: seo.title,
+    description: seo.description,
+    keywords: seo.keywords,
+    alternates: { canonical: `${siteSEO.baseUrl}${seo.canonical}` },
+    openGraph: {
+      title: seo.title,
+      description: seo.description,
+      url: `${siteSEO.baseUrl}${seo.canonical}`,
+      siteName: siteSEO.siteName,
+      locale: siteSEO.locale,
+      type: "website",
+      images: [
+        {
+          url: `${siteSEO.baseUrl}${seo.ogImage || siteSEO.defaultImage}`,
+          width: 1200,
+          height: 630,
+          alt: seo.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.title,
+      description: seo.description,
+      images: [`${siteSEO.baseUrl}${seo.ogImage || siteSEO.defaultImage}`],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    },
+  };
+}
+
 // ─── Schema Generators ────────────────────────────────────────────────────────
+
+export function getProductSchema(seoData) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: seoData.h1 || seoData.title,
+    description: seoData.description,
+    url: `${siteSEO.baseUrl}${seoData.canonical}`,
+    brand: {
+      "@type": "Brand",
+      name: "UNI-TREAT®",
+    },
+    manufacturer: {
+      "@type": "Organization",
+      name: siteSEO.siteName,
+      url: siteSEO.baseUrl,
+    },
+    category: seoData.breadcrumb,
+  };
+}
+
+export function getProductCategorySchema(seoData) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: seoData.h1 || seoData.title,
+    description: seoData.description,
+    url: `${siteSEO.baseUrl}${seoData.canonical}`,
+    isPartOf: {
+      "@type": "WebSite",
+      name: siteSEO.siteName,
+      url: siteSEO.baseUrl,
+    },
+  };
+}
+
 export function getBreadcrumbSchema(items) {
   return {
     "@type": "BreadcrumbList",
